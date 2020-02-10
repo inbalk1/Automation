@@ -12,4 +12,4 @@ instructions:
 - imap server (should be: 'imap.yourdomain.com') - for getting email and reading it.
 - if the email message contains  attachments it would save it,  so please mention the path where you want to save your files.
 
-2) try to run the script
+2) try to run the script.
