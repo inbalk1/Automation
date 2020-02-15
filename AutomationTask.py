@@ -13,7 +13,7 @@ from email.message import EmailMessage
 
 
 user = input("enter your email: ")
-password = os.environ.get('DB_PASS')
+password = input("password")
 imap_url = "imap.yourdomain.com"
 sender = "email of the person you want to receive email from "
 # Where you want your attachments to be saved (ensure this directory exists)
@@ -24,13 +24,33 @@ smtp_con = 'smtp.yourdomain.com'
 def auth(user,password,imap_url):
     con = imaplib.IMAP4_SSL(imap_url)
     con.login(user, password)
-    return con
+
+# TODO: missing parameters checking.
+    # try:
+    #   con = imaplib.IMAP4_SSL(imap_url)
+    #   con.login(user, password)
+    # except (pass error, username error, con error):
+    #   print("wrong credentials, please try again")
+    #   con.login(user, password)
+    # else:
+    #    print("succsesfully logged in")
+    # return con
 
 # search email ids from praticular email
 def search_emails(key, value, con):
     result, data = con.search(None, key, '"{}"'.format(value))
     id_list = data[0].split()
     return id_list
+
+# TODO: missing parameters checking (checking the result variable).
+    # result check (because it basically contains a value if the emails exits or not)
+
+    # result, data = con.search(None, key, '"{}"'.format(value))
+    # if result = "no":
+    #   print("files doesn't exists, please try another key or email")
+    # else:
+    #   id_list = data[0].split()
+
 
 # allows you to download attachments
 def get_attachments(msg):
@@ -45,6 +65,22 @@ def get_attachments(msg):
             with open(filePath,'wb') as f:
                 f.write(part.get_payload(decode=True))
         return fileName
+
+# TODO: adding some counter to files (because if files have the same name they can't be saved so we need to add numbers).
+# here i added counter to files and i added an extention checker (with mimetypes) instead of using regex later on.
+    # import mimetypes
+    # counter = 1
+    # for part in email_message.walk():
+    #     if part.get_content_maintype() == "multipart":
+    #         continue
+    #     if part.get('Content-Disposition') is None:
+    #         continue
+    #     filename = part.get_filename()
+    #     ext = mimetypes.guess_extension(filename)
+    #     if ext = ".txt":
+    #         filename = 'msg-part-%08d%s' % (counter, ext)
+    #     counter += 1
+    # return file name
 
 # send email
 def send_email(email, password, smtp, sender_email, body):
@@ -102,6 +138,7 @@ def main():
                     send_email(user, password, smtp_con, sender, error)
                 finally:
                     print("done")
+
             else:
                 done = "no"
                 print("attachment missing, message has been sent to: " + sender)
