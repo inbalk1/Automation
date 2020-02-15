@@ -24,6 +24,7 @@ smtp_con = 'smtp.yourdomain.com'
 def auth(user,password,imap_url):
     con = imaplib.IMAP4_SSL(imap_url)
     con.login(user, password)
+<<<<<<< HEAD
 
 # TODO: missing parameters checking.
     # try:
@@ -35,12 +36,17 @@ def auth(user,password,imap_url):
     # else:
     #    print("succsesfully logged in")
     # return con
+=======
+    return con
+# TODO: needs more athurization for user email and password, needs another dunction to check all this parameters.
+>>>>>>> 8fe2ba0c9cecc012f019a8a8b9ed04d773e73288
 
 # search email ids from praticular email
 def search_emails(key, value, con):
     result, data = con.search(None, key, '"{}"'.format(value))
     id_list = data[0].split()
     return id_list
+# TODO: needs more checkings to handle cases when data don't come back.
 
 # TODO: missing parameters checking (checking the result variable).
     # result check (because it basically contains a value if the emails exits or not)
@@ -65,6 +71,9 @@ def get_attachments(msg):
             with open(filePath,'wb') as f:
                 f.write(part.get_payload(decode=True))
         return fileName
+  # TODO: needs to check if files contain the same name, otherwise we might need to add a number so the os could save them.
+    
+ 
 
 # TODO: adding some counter to files (because if files have the same name they can't be saved so we need to add numbers).
 # here i added counter to files and i added an extention checker (with mimetypes) instead of using regex later on.
